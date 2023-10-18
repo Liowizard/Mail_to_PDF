@@ -16,7 +16,7 @@ def get_selected_date():
     global date  # Declare 'date' as a global variable
     selected_date_str = cal.get_date()
     selected_date = datetime.strptime(selected_date_str, "%x")
-    date = selected_date.strftime("%d.%m")
+    date = selected_date.strftime("%d.%m.%Y")
     print("Selected Date:", date)
     root.destroy()
 
