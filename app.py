@@ -9,7 +9,8 @@ from reportlab.platypus import Image
 import tkinter as tk
 from tkcalendar import Calendar
 from datetime import datetime
-
+from datetime import date
+# from tkinter import messagebox
 
 
 def get_selected_date():
@@ -22,12 +23,41 @@ def get_selected_date():
 
 
 
+def get_user_input(choice):
+    global a  # Access the 'a' variable declared outside the function
+
+    if choice == "Yes":
+        a = 'INBOX'
+    elif choice == "No":
+        a = 'Inbox.Sent'
+
+    root.destroy()
+
+
+
+root = tk.Tk()
+root.title("Yes or No Dialog")
+root.geometry("300x150")
+
+label = tk.Label(root, text="Choose Your required folder :")
+label.pack(pady=10)
+
+yes_button = tk.Button(root, text="Inbox", command=lambda: get_user_input("Yes"))
+yes_button.pack(pady=10) 
+
+no_button = tk.Button(root, text="Sent", command=lambda: get_user_input("No"))
+no_button.pack(pady=10)
+
+root.mainloop()
+
 
 root = tk.Tk()
 root.title("Date Picker")
 
-cal = Calendar(root, selectmode="day", year=2023, month=10, day=6)
-cal.pack(padx=10, pady=10)
+
+current_date = date.today()
+cal = Calendar(root, selectmode="day", year=current_date.year, month=current_date.month, day=current_date.day)
+cal.pack(pady=10)
 
 select_button = tk.Button(root, text="Select Date", command=get_selected_date)
 select_button.pack(pady=10)
@@ -42,7 +72,7 @@ root.mainloop()
 user = "trade@smartserve.co"#input("Pls enter you User ID : ")  # "ajeshrandam@gmail.com"  AjeshTest6@outlook.com   trade@smartserve.co
 password ="Trade@1234" #input("Pls enter your Password : ")  # "gcic sssf zsfm bvox" Ajesh1161      Trade@1234
 date =date #input("Pls select date like (06-oct-2023) : ") # "06-oct-2023"
-Folder="Inbox"# input("Inbox or Sent : ")
+Folder=a# input("Inbox or Sent : ")
 
 imap_url = "smartserve.co"#'outlook.office365.com' #smartserve.co
 
@@ -67,7 +97,7 @@ for msg in search[0].split():
 
 
 
-count=[]
+count=0
 for msg in msgs[::-1]:
     for response_part in msg:
         if type(response_part) is tuple:
@@ -85,12 +115,12 @@ for msg in msgs[::-1]:
             print(cont)
             extracted_word=extracted_word.replace('+canned_response','')
             print(extracted_word)
-            count.append(extracted_word)
+            count+=1
 
             doc_folder = 'doc'
             if not os.path.exists(doc_folder):
                 os.makedirs(doc_folder)
-            pdf_filename =os.path.join("Doc", f'{extracted_word}_{cont}.pdf')
+            pdf_filename =os.path.join("Doc", f'{extracted_word}_{cont}_{count}.pdf')
 
             c = canvas.Canvas(pdf_filename, pagesize=letter)
 
@@ -126,9 +156,6 @@ for msg in msgs[::-1]:
 
             c.save()
 
-print(len(count))
+print(count)
 
 my_mail.close()
-
-
-
