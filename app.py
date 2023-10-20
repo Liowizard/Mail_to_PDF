@@ -102,11 +102,15 @@ for msg in msgs[::-1]:
     for response_part in msg:
         if type(response_part) is tuple:
             my_msg = email.message_from_bytes((response_part[1]))
-            match = re.search(r'<(.*?)>', my_msg["from"])
+            if Folder=="Inbox.Sent":
+                name=my_msg["to"]
+            elif Folder=="Inbox":
+                name=my_msg["from"]
+            match = re.search(r'<(.*?)>', name)
             if match:
                 extracted_word = match.group(1).replace('.', '_')
             else:
-                extracted_word = my_msg["from"].replace('.', '_')
+                extracted_word = name.replace('.', '_')
             cont=my_msg["subject"].replace('Re: Trade confirmation ', '')
             cont=cont.replace('Re: Trade Confirmation ', '')
             cont=re.sub("[^a-zA-Z0-9.]", "", cont)
