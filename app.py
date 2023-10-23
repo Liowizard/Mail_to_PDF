@@ -104,7 +104,7 @@ for msg in msgs[::-1]:
             my_msg = email.message_from_bytes((response_part[1]))
             if Folder=="Inbox.Sent":
                 name=my_msg["to"]
-            elif Folder=="Inbox":
+            elif Folder=="INBOX":
                 name=my_msg["from"]
             match = re.search(r'<(.*?)>', name)
             if match:
