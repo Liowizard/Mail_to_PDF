@@ -45,8 +45,8 @@ date = None  # Initialize the 'date' variable
 root.mainloop()
 
 
-user = input("Pls enter you User ID : ")  # "trade@smartserve.co"
-password = input("Pls enter your Password : ")  # "Trade@1234"
+# user = input("Pls enter you User ID : ")  # "trade@smartserve.co"
+# password = input("Pls enter your Password : ")  # "Trade@1234"
 date = date  # input("Pls select date like (06-oct-2023) : ") # "06-oct-2023"
 
 
@@ -54,7 +54,8 @@ imap_url = "smartserve.co"  #'outlook.office365.com' #smartserve.co
 
 my_mail = imaplib.IMAP4_SSL(imap_url)
 
-my_mail.login(user, password)
+
+my_mail.login("trade@smartserve.co", "Trade@1234")
 
 print("imap.list()", my_mail.list())
 sent = {}
@@ -111,7 +112,7 @@ for Folder in ["Inbox.Sent", "INBOX"]:
                     c.drawString(
                         20,
                         720,
-                        f'From:       {my_msg["from"].split(" ")[0]}" <{extracted_word.replace("_", ".")}>',
+                        f'From:       {my_msg["from"].split("<")[0]}" <{extracted_word.replace("_", ".")}>',
                     )
                     input_timestamp = my_msg.get("Received")
                     # last_received_entry = input_timestamp[-1]
@@ -158,13 +159,18 @@ for Folder in ["Inbox.Sent", "INBOX"]:
                     result_timestamp = converted_datetime.strftime(
                         "%a, %d %b %Y at  %H:%M"
                     )
-
+                    print(f'test {my_msg["subject"]}')
+                    name = my_msg["from"].split("<")[0]
                     c.drawString(
                         20,
                         y_position,
-                        f"on {result_timestamp} {sent[f'{extracted_word}_{cont}'.upper()]['from']} Wrote: ",
+                        f"on {result_timestamp} {sent[f'{extracted_word}_{cont}'.upper()]['from']} Wrote:{name}  <{extracted_word.replace('_', '.')}>",
                     )
                     starting = y_position
+                    y_position -= 20
+                    c.drawString(
+                        20, y_position, "Subject:   {}".format(my_msg["subject"])
+                    )
                     y_position -= 50
                     for part in sent[f"{extracted_word}_{cont}".upper()].walk():
                         if part.get_content_type() == "text/plain":
