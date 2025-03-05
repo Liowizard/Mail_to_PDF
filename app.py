@@ -104,7 +104,7 @@ for Folder in ["Inbox.Sent", "INBOX"]:
                     sent[f"{extracted_word}_{cont}".upper()] = my_msg
 
                 else:
-                    pdf_filename = os.path.join("Doc", f"{extracted_word}_{cont}.pdf")
+                    pdf_filename = os.path.join("doc", f"{extracted_word}_{cont}.pdf")
 
                     c = canvas.Canvas(pdf_filename, pagesize=letter)
 
@@ -115,17 +115,20 @@ for Folder in ["Inbox.Sent", "INBOX"]:
                         f'From:       {my_msg["from"].split("<")[0]}" <{extracted_word.replace("_", ".")}>',
                     )
                     input_timestamp = my_msg.get("Received")
-                    # last_received_entry = input_timestamp[-1]
-                    input_timestamp = input_timestamp.split(";")[-1].strip()
-                    input_timestamp = parsedate_to_datetime(input_timestamp)
+                    if input_timestamp :
+                        # last_received_entry = input_timestamp[-1]
+                        input_timestamp = input_timestamp.split(";")[-1].strip()
+                        input_timestamp = parsedate_to_datetime(input_timestamp)
 
-                    print(input_timestamp, "input_timestamp")
-                    input_datetime = datetime.strptime(
-                        str(input_timestamp), "%Y-%m-%d %H:%M:%S%z"
-                    )
-                    target_timezone = timezone(timedelta(hours=5, minutes=30))
-                    converted_datetime = input_datetime.astimezone(target_timezone)
-                    result_timestamp = converted_datetime.strftime("%d %b %Y %H:%M")
+                        print(input_timestamp, "input_timestamp")
+                        input_datetime = datetime.strptime(
+                            str(input_timestamp), "%Y-%m-%d %H:%M:%S%z"
+                        )
+                        target_timezone = timezone(timedelta(hours=5, minutes=30))
+                        converted_datetime = input_datetime.astimezone(target_timezone)
+                        result_timestamp = converted_datetime.strftime("%d %b %Y %H:%M")
+                    else:
+                        continue
                     c.drawString(20, 700, "Date:        {}".format(result_timestamp))
                     c.drawString(20, 680, "To:           {}".format(my_msg["To"]))
 
